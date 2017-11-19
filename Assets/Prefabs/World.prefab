@@ -20,6 +20,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4037075765193790}
   - component: {fileID: 114432371689384588}
+  - component: {fileID: 114236302999476250}
+  - component: {fileID: 114311310837258862}
+  - component: {fileID: 114349295919336208}
   m_Layer: 0
   m_Name: World
   m_TagString: Untagged
@@ -40,6 +43,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114236302999476250
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1770969633034102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b04d8792317141cdabb2f790c4369c49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SnowballPrefab: {fileID: 1830520948350310, guid: d36280fb1b7edab41b03dca35e7d9240,
+    type: 2}
+--- !u!114 &114311310837258862
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1770969633034102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e644eca3a23848ae85f70be1844cc9ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114349295919336208
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1770969633034102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4f6eb77acf04ea45af3d1dadd35fa73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114432371689384588
 MonoBehaviour:
   m_ObjectHideFlags: 1

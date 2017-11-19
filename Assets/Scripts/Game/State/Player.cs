@@ -1,16 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Game.State
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] public int ClientID { get; private set; }
-        [SerializeField] private float _posX;
-        [SerializeField] private float _posY;
+        [SerializeField] private string _userID;
+        private float _posX;
+        private float _posY;
+        public float Facing;
+        public int Score;
 
-        public void Initialize(int clientID)
+        public string UserID
         {
-            ClientID = clientID;
+            get { return _userID; }
+        }
+
+        public void Initialize(string userID)
+        {
+            _userID = userID;
         }
 
         public void SetPosition(Vector2 position)
@@ -25,6 +33,19 @@ namespace Game.State
             _posX += x;
             _posY += y;
             SetPosition(new Vector2(_posX, _posY));
+        }
+    }
+
+    [Serializable]
+    public class SerializablePlayer
+    {
+        public string UserID;
+        public int Score;
+
+        public SerializablePlayer(Player player)
+        {
+            UserID = player.UserID;
+            Score = player.Score;
         }
     }
 }

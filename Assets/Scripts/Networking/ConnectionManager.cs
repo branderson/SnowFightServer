@@ -1,42 +1,115 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Utility;
 using Game.State;
 using UnityEngine;
 
 namespace Networking
 {
-    public class ConnectionManager : MonoBehaviour
+    public class ConnectionManager : Singleton<ConnectionManager>
     {
-        // Dictionary<connectionID, port>
+        // Dictionary<clientID, port>
         private readonly Dictionary<int, int> _connections = new Dictionary<int, int>();
 
-        private World _world;
+        // Dictionary<userID, loggedIn>
+        private readonly Dictionary<string, bool> _loggedIn = new Dictionary<string, bool>();
 
-        private void Start()
-        {
-            _world = GameObject.FindObjectOfType<World>();
-        }
+        // Dictionary<userID, clientID>
+        private readonly Dictionary<string, int> _users = new Dictionary<string, int>();
+
+        // Dictionary<clientID, userID>
+        private readonly Dictionary<int, string> _userClientIDs = new Dictionary<int, string>();
+
+        protected ConnectionManager() { }
 
         public void AddClient(int clientID, int port)
         {
             _connections.Add(clientID, port);
-            _world.AddPlayer(clientID);
         }
 
         public void RemoveClient(int clientID)
         {
             _connections.Remove(clientID);
-            _world.RemovePlayer(clientID);
+            string userID;
+            if (_userClientIDs.TryGetValue(clientID, out userID))
+            {
+                if (_loggedIn[userID]) Logout(userID);
+            }
+        }
+
+        public bool GetClientConnected(int clientID)
+        {
+            return _connections.ContainsKey(clientID);
         }
 
         public int GetClientPort(int clientID)
         {
-            return _connections[clientID];
+            int port;
+            if (_connections.TryGetValue(clientID, out port))
+            {
+                return _connections[clientID];
+            }
+            return 0;
+        }
+
+        public bool Login(string userID, int clientID)
+        {
+            bool loggedIn;
+            if (_loggedIn.TryGetValue(userID, out loggedIn))
+            {
+                if (loggedIn)
+                {
+                    Debug.Log(string.Format("User attempted to login as {0} but {0} is already logged in", userID));
+                    return false;
+                }
+            }
+            Player player = World.Instance.GetPlayer(userID);
+            if (player != null)
+            {
+                player.gameObject.SetActive(true);
+            }
+            else
+            {
+                World.Instance.AddPlayer(userID);
+            }
+            _users[userID] = clientID;
+            _userClientIDs[clientID] = userID;
+            _loggedIn[userID] = true;
+            Debug.Log(string.Format("Event: Log In, UserID: {0}, ClientID: {1}", userID, clientID));
+            return true;
+        }
+
+        public void Logout(string userID)
+        {
+            if (!_loggedIn.ContainsKey(userID) || !_loggedIn[userID])
+            {
+                Debug.Log(string.Format("User {0} attempted to logout but was not logged in", userID));
+                return;
+            }
+            Player player = World.Instance.GetPlayer(userID);
+            if (player == null)
+            {
+                Debug.Log(string.Format("User {0} tried to logout but does not exist in the game", userID));
+                return;
+            }
+            Debug.Log("Event: Log Out, UserID: " + userID);
+            player.gameObject.SetActive(false);
+            _loggedIn[userID] = false;
+        }
+
+        public int GetClientID(string userID)
+        {
+            return _users[userID];
         }
 
         public int[] GetClientIDs()
         {
             return _connections.Keys.ToArray();
+        }
+
+        public string[] GetUserIDs()
+        {
+            return _users.Keys.ToArray();
         }
     }
 }

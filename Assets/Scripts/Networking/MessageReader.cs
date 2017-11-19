@@ -1,6 +1,8 @@
-﻿using Game.State;
+﻿using Game;
+using Game.State;
 using Networking.Data;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 namespace Networking
 {
@@ -20,19 +22,82 @@ namespace Networking
                     if (value == null) throw new WrongPacketTypeException();
                     Debug.Log(value);
                     break;
+                case Packets.Login:
+                    HandleLogin(SerializationHandler.Deserialize<Login>(envelope.Packet));
+                    break;
+                case Packets.JoinTeam:
+                    HandleJoinTeam(SerializationHandler.Deserialize<JoinTeam>(envelope.Packet));
+                    break;
                 case Packets.PlayerUpdate:
                     HandlePlayerUpdate(SerializationHandler.Deserialize<PlayerUpdate>(envelope.Packet));
+                    break;
+                case Packets.SpawnSnowball:
+                    HandleSpawnSnowball(SerializationHandler.Deserialize<SpawnSnowball>(envelope.Packet));
                     break;
                 default:
                     break;
             }
         }
 
+        private static void HandleLogin(Login login)
+        {
+            if (login == null) throw new WrongPacketTypeException();
+            bool success = ConnectionManager.Instance.Login(login.UserID, login.ClientID);
+            AckLogin ack = new AckLogin
+            {
+                UserID = login.UserID,
+                Success = success,
+            };
+            Socket.Instance.SendPacket(ack, Packets.AckLogin, login.ClientID);
+        }
+
+        private static void HandleJoinTeam(JoinTeam joinTeam)
+        {
+            if (joinTeam == null) throw new WrongPacketTypeException();
+            bool success = TeamManager.Instance.AddUserToTeam(joinTeam.UserID, joinTeam.TeamName);
+            AckJoinTeam ack = new AckJoinTeam
+            {
+                UserID = joinTeam.UserID,
+                TeamName = joinTeam.TeamName,
+                Success = success,
+            };
+            Socket.Instance.SendPacket(ack, Packets.AckJoinTeam, ConnectionManager.Instance.GetClientID(joinTeam.UserID));
+        }
+
         private static void HandlePlayerUpdate(PlayerUpdate update)
         {
             if (update == null) throw new WrongPacketTypeException();
-            Player player = World.Instance.GetPlayer(update.ClientID);
+            Player player = World.Instance.GetPlayer(update.UserID);
+            if (player == null)
+            {
+                Debug.LogError("No player exists for PlayerUpdate received!");
+                return;
+            }
             player.Move(update.MoveX, update.MoveY);
+            player.Facing = update.Facing;
+        }
+
+        private static void HandleSpawnSnowball(SpawnSnowball spawn)
+        {
+            if (spawn == null) throw new WrongPacketTypeException();
+            GameObject snowball = GameObject.Instantiate(Prefabs.Instance.SnowballPrefab);
+            snowball.transform.position = new Vector2(spawn.PosX, spawn.PosY);
+            Vector2 angle = Quaternion.AngleAxis(spawn.Direction, Vector3.forward) * Vector3.down;
+            snowball.GetComponent<Rigidbody2D>().velocity = angle * Snowball.Speed;
+
+            int id = World.Instance.AddObject(snowball);
+            snowball.GetComponent<Snowball>().Initialize(id);
+
+            SnowballSync sync = new SnowballSync
+            {
+                ObjectID = id,
+                PosX = spawn.PosX,
+                PosY = spawn.PosY,
+                Direction = spawn.Direction,
+                Velocity = Snowball.Speed,
+            };
+
+            Socket.Instance.SendPacket(sync, Packets.SnowballSync);
         }
     }
 }

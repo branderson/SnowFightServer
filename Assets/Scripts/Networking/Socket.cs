@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using Assets.Utility;
 using Game.State;
 using Networking.Data;
@@ -23,7 +21,8 @@ namespace Networking
         // Dictionary<socketID, port>
         private readonly Dictionary<int, int> _sockets = new Dictionary<int, int>();
 
-        private ConnectionManager _connectionManager;
+        // Dictionary<port, socketID>
+        private readonly Dictionary<int, int> _ports = new Dictionary<int, int>();
 
         protected Socket() { }
 
@@ -31,8 +30,6 @@ namespace Networking
         {
             Time.fixedDeltaTime = 1f / 30f;
             InitializeSocket();
-
-            _connectionManager = GetComponent<ConnectionManager>();
         }
 	
         private void FixedUpdate()
@@ -63,6 +60,8 @@ namespace Networking
             // Map ports
             _sockets.Add(_socketID, _socketPort);
             _sockets.Add(_websocketID, _websocketPort);
+            _ports.Add(_socketPort, _socketID);
+            _ports.Add(_websocketPort, _websocketID);
         }
 
         private void PollSocket()
@@ -90,11 +89,11 @@ namespace Networking
             {
                 case NetworkEventType.ConnectEvent:
                     Debug.Log("Event: Connected, ClientID: " + connectionID);
-                    _connectionManager.AddClient(connectionID, _sockets[hostID]);
+                    ConnectionManager.Instance.AddClient(connectionID, _sockets[hostID]);
                     break;
                 case NetworkEventType.DisconnectEvent:
                     Debug.Log("Event: Disconnected, ClientID: " + connectionID);
-                    _connectionManager.RemoveClient(connectionID);
+                    ConnectionManager.Instance.RemoveClient(connectionID);
                     break;
                 case NetworkEventType.DataEvent:
                     MessageReader.ReadMessage(buffer);
@@ -109,8 +108,23 @@ namespace Networking
             World.Instance.SyncPlayers();
         }
 
+        public void SendPacket<T>(T packet, Packets packetType) where T : class
+        {
+            foreach (int clientID in ConnectionManager.Instance.GetClientIDs())
+            {
+                SendPacket(packet, packetType, clientID);
+            }
+        }
+
+        public void SendPacket<T>(T packet, Packets packetType, string userID) where T : class
+        {
+            int clientID = ConnectionManager.Instance.GetClientID(userID);
+            SendPacket(packet, packetType, clientID);
+        }
+
         public void SendPacket<T>(T packet, Packets packetType, int clientID) where T : class
         {
+            if (!ConnectionManager.Instance.GetClientConnected(clientID)) return;
             Envelope envelope = new Envelope
             {
                 PacketType = packetType,
@@ -118,26 +132,9 @@ namespace Networking
             };
             byte error;
             byte[] message = SerializationHandler.Serialize(envelope, _bufferSize);
-            int socketID = _sockets.First(item => item.Value ==  _connectionManager.GetClientPort(clientID)).Key;
+            int socketID = _ports[ConnectionManager.Instance.GetClientPort(clientID)];
 //            Thread.Sleep(200);
             NetworkTransport.Send(socketID, clientID, _channelID, message, _bufferSize, out error);
-        }
-
-        public void SendJSONMessage(int clientID, PlayerUpdate message)
-        {
-            Debug.Log(string.Format("Event: Send Message, ClientID: {0}, Message: {1}", clientID, message));
-            SendPacket(message, Packets.PlayerUpdate, clientID);
-        }
-
-        public void SendSocketMessage()
-        {
-            PlayerUpdate update = new PlayerUpdate
-            {
-            };
-            foreach (int clientID in _connectionManager.GetClientIDs())
-            {
-                SendJSONMessage(clientID, update);
-            }
         }
     }
 }

@@ -6,9 +6,11 @@ namespace Networking.Data
     public class PlayerUpdate
     {
         public DateTime Time = DateTime.UtcNow;
-        public int ClientID = 0;
+        public string UserID;
         public float MoveX = 0;
         public float MoveY = 0;
+        public float Facing = 0f;
         public bool Fire = false;
+        public bool PickUp = false;
     }
 }
