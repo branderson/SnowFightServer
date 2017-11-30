@@ -10,7 +10,8 @@ namespace Networking.Data
         public float PosX = 0f;
         public float PosY = 0f;
         public float Facing = 0f;
+        public int Health = 3;
+        public bool Carrying = false;
         public bool WasHit = false;
-        public bool PickedUp = false;
     }
 }

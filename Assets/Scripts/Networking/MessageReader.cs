@@ -75,18 +75,39 @@ namespace Networking
             }
             player.Move(update.MoveX, update.MoveY);
             player.Facing = update.Facing;
+            if (update.PickUp)
+            {
+                player.PickUp();
+            }
         }
 
         private static void HandleSpawnSnowball(SpawnSnowball spawn)
         {
             if (spawn == null) throw new WrongPacketTypeException();
+            Player player = World.Instance.GetPlayer(spawn.UserID);
+            if (player.Carrying) return;
             GameObject snowball = GameObject.Instantiate(Prefabs.Instance.SnowballPrefab);
             snowball.transform.position = new Vector2(spawn.PosX, spawn.PosY);
             Vector2 angle = Quaternion.AngleAxis(spawn.Direction, Vector3.forward) * Vector3.down;
-            snowball.GetComponent<Rigidbody2D>().velocity = angle * Snowball.Speed;
+            Rigidbody2D rigidbody = snowball.GetComponent<Rigidbody2D>();
+            // Ignore collisions with player who threw it
+            Rigidbody2D playerRigidbody = player.GetComponent<Rigidbody2D>();
+            // TODO: Make this a helper function in utilities
+            Collider2D[] playerCols = new Collider2D[playerRigidbody.attachedColliderCount];
+            Collider2D[] snowCols = new Collider2D[rigidbody.attachedColliderCount];
+            rigidbody.GetAttachedColliders(snowCols);
+            foreach (Collider2D snowCol in snowCols)
+            {
+                foreach (Collider2D playerCol in playerCols)
+                {
+                    Physics2D.IgnoreCollision(snowCol, playerCol);
+                }
+            }
+
+            rigidbody.velocity = angle * Snowball.Speed;
 
             int id = World.Instance.AddObject(snowball);
-            snowball.GetComponent<Snowball>().Initialize(id);
+            snowball.GetComponent<Snowball>().Initialize(id, spawn.UserID);
 
             SnowballSync sync = new SnowballSync
             {

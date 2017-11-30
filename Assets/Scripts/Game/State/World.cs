@@ -121,8 +121,12 @@ namespace Game.State
                     PosX = player.transform.position.x,
                     PosY = player.transform.position.y,
                     Facing = player.Facing,
+                    Health = player.Health,
+                    Carrying = player.Carrying,
+                    WasHit = player.WasHit,
                 };
                 Socket.Instance.SendPacket(sync, Packets.PlayerSync);
+                player.WasHit = false;
             }
         }
 

@@ -5,13 +5,15 @@ namespace Game.State
     public class Snowball : MonoBehaviour
     {
         [SerializeField] public static float Speed = 10f;
+        public string OwnerID;
         [SerializeField] private float _lifespan = 3f;
 
         private int _objectID;
 
-        public void Initialize(int id)
+        public void Initialize(int id, string ownerID)
         {
             _objectID = id;
+            OwnerID = ownerID;
         }
 
         public void Update()
@@ -19,8 +21,13 @@ namespace Game.State
             _lifespan -= Time.deltaTime;
             if (_lifespan <= 0)
             {
-                World.Instance.DestroyObject(_objectID);
+                Destroy();
             }
+        }
+
+        public void Destroy()
+        {
+            World.Instance.DestroyObject(_objectID);
         }
     }
 }
