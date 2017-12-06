@@ -18,12 +18,16 @@ namespace Game.State
         // Dictionary<objectID, GameObject>
         private Dictionary<int, GameObject> _worldObjects;
 
+        private Dictionary<Fortress, Player> _fortresses;
+
         protected World() { }
 
         public void Awake()
         {
             _players = new Dictionary<string, Player>();
             _worldObjects = new Dictionary<int, GameObject>();
+            _fortresses = new Dictionary<Fortress, Player>();
+            LoadFortresses();
         }
 
         /// <summary>
@@ -37,9 +41,12 @@ namespace Game.State
         /// </returns>
         public Player AddPlayer(string userID)
         {
+            // TODO: Prevent adding too many players
             GameObject playerObject = Instantiate(_playerPrefab, this.transform);
             Player player = playerObject.GetComponent<Player>();
-            player.Initialize(userID);
+            Fortress fortress = GetUnassignedFortress();
+            AssignFortress(fortress, player);
+            player.Initialize(userID, fortress);
 
             _players[userID] = player;
 
@@ -96,7 +103,9 @@ namespace Game.State
             {
                 GameObject playerObject = Instantiate(_playerPrefab, this.transform);
                 Player newPlayer = playerObject.GetComponent<Player>();
-                newPlayer.Initialize(player.UserID);
+                Fortress fortress = GetFortress(player.FortressID);
+                AssignFortress(fortress, newPlayer);
+                newPlayer.Initialize(player.UserID, fortress);
                 newPlayer.Score = player.Score;
                 newPlayer.gameObject.SetActive(false);
 
@@ -121,6 +130,7 @@ namespace Game.State
                     PosX = player.transform.position.x,
                     PosY = player.transform.position.y,
                     Facing = player.Facing,
+                    FortressID = player.Fortress.ID,
                     Health = player.Health,
                     Carrying = player.Carrying,
                     WasHit = player.WasHit,
@@ -128,6 +138,52 @@ namespace Game.State
                 Socket.Instance.SendPacket(sync, Packets.PlayerSync);
                 player.WasHit = false;
             }
+        }
+
+        /// <summary>
+        /// Load fortresses into the world
+        /// </summary>
+        private void LoadFortresses()
+        {
+            foreach (Fortress fortress in FindObjectsOfType<Fortress>())
+            {
+                _fortresses[fortress] = null;
+            }
+        }
+
+        /// <summary>
+        /// Get a fortress which has not yet been assigned to a player
+        /// </summary>
+        /// <returns>
+        /// Fortress not yet assigned to a player
+        /// </returns>
+        private Fortress GetUnassignedFortress()
+        {
+            List<Fortress> unused = _fortresses.Where(item => item.Value == null).Select(item => item.Key).ToList();
+            // TODO: Handle case where no unused fortress
+            return unused[RNG.Instance.Random.Next(unused.Count)];
+        }
+
+        private void AssignFortress(Fortress fortress, Player owner)
+        {
+            // TODO: Prevent reassignment of fortresses
+            _fortresses[fortress] = owner;
+            fortress.OwnerID = owner.UserID;
+        }
+
+        /// <summary>
+        /// Get the Fortress with the given ID
+        /// </summary>
+        /// <param name="fortressID">
+        /// ID of Fortress to get
+        /// </param>
+        /// <returns>
+        /// Fortress with the given ID
+        /// </returns>
+        public Fortress GetFortress(int fortressID)
+        {
+            Fortress fortress = _fortresses.Keys.FirstOrDefault(item => item.ID == fortressID);
+            return fortress;
         }
 
         /// <summary>

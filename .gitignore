@@ -5,6 +5,7 @@
 /[Bb]uilds/
 
 /Assets/AssetStoreTools*
+/Assets/TiledLoader/Tool
 *.swp
 
 # Visual Studio 2015 cache directory

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="objects-spritesheet" tilewidth="32" tileheight="32" tilecount="100" columns="10">
+  <image source="../../../../Dropbox/Adina/SnowballFight/objects-spritesheet.png" width="320" height="320"/>
+  <tile id="4">
+   <properties>
+    <property name="Name" value="Snowdrift1"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="Name" value="Snowdrift2"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="Name" value="Snowdrift3"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="Name" value="Snowdrift4"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="Name" value="Snowdrift5"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="Name" value="Tree"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="Name" value="Snowman"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="Name" value="Snowman2"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="Name" value="IceSlick"/>
+   </properties>
+  </tile>
+  <tile id="51">
+   <properties>
+    <property name="Name" value="Fortress"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Tile Layer 1" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt3LGO6zYQBVD/SZwySZnk/38tfkhhrWCCskRJw5lzABdujIV5qZnrYh8PRvrt9Xq+Xr833v/xev35ev21833v8yGKT9ns5fvv1+uf1+vfne97n9/6u+BsvVnwSy/fR235/N7MgRF692F09kfpzRz3hT1mvQ897gt7ZL0PPe4LW1S5Dz29+0Idy2dj1fvQs/xezJLctvzmRJvdKzc71DF2r1zWzzf3Yaz192mezMXz7Vq+79jMi3vp8rF5fsXhLGLwG21MukkMnlNzcE73MDPm4JyuYU7n4BzPYU7n4BzH0cHz8VvwOJ41uTnfY8yM3Jzv98zcmpz7NmZuTc69TQ9Hb2/z7GBJHn4yM1iSBzOUbarmxAxli6o5MUPZolJOqs5Kxsien6qzkjGy56fSrGS8jPnJPhO5R5ZcZZ+J3CNLrjLORO4nV5BTlt2QOcyWtyy7IXOYLW92Q640S95mm3PkEj1/s805comev1nmHDlFzV/0uUYt0fIYfa5RS7Q8Rp1r1CSPEFu0HQ8+uSun0XY8+OSunNrxmMHVObVXMaOrcmuvYkZX5dZexYzkFu6jd5DBWTnWO8jgrBzb38hAjuFaugeZjM6z7kEmo/NsZyMTeYbz6R1kdjTfegeZHc23PY3MjuTbbkUFe3Nut6KCvTm3W1GBnMM4egcVbc293kFFW3NvH6MiuYdjdA8q6+Vf96CyXv7tYFQm/7CP7gHte6B7QPse2L3APYBv6R7wtr4Puge8re+DnQve3AcARtDP4U0/hzb9HNrcB9ju+dA9YGnZQXQP+GnZQexa8JMOAts8H/oHLOkf0KZ/QJv+Ads8H/oHLOkf0KZ/QJv+Ads8H/oHLOkf0KZ/QJv+Ads8H/oHLOkf0KZ/QJv+Adv4/1fw5v9fQZv/fwVt7gMAI+jn8KafQ5t+Dm3uA3xHB4H2PdBBoH0P7FzgHsBeOgiV9fKvg1BZL/92LyqTfzhGB6GirbnXQahoa+7tYFQk9zCOHkIFe3Ouh1DB3pzbx6jgSM7tWGR2NN92LDI7mm87FpnJN5xPDyGT0XnWQ8hkdJ7taWQiz3AtHYQMzsqxDkIGZ+XYzkYGcgz30UOY0VW51UOY0VW5tb8xo6tza89iBnfl1J7FDO7KqT2LGcgpxKaLEEm0POoiRBItj3Y8Iomax2hzjVqi5y/aXKOW6PmLOteoYZb8RZ9z5DJb3qLPOXKZLW+zzDlykDfIabbdkDlkydVsuyFzyJIruyFnyJirLDORe2TPT5aZyD2y5yfjTOQ6lfKTfVYyRtWcZJ+VjFE1J5VmJfvJSd0Zymfy8FPVGcpn8vDTcoZ6dtS0PHc7VZtnR03OfRvPjpqc+/fsWrk532PM3Nyc7zF6ez56+Dk8a3JwjufwrMnBOV7DvjUH53QPc3oOzuke6zntORXD+hzsUzF4TsXgHGLyW/B9/GY7F8+wa/m+56KbnEvHyGX9fHNfvrP+vsyLXNbPN+f7nfX3ZV7kpsv36dz8Yvf6nx2KT3q7V9b70rsPZgafZL0v7gNnmPW+uA/cYctvYetsjr5DWz7ffSCCT7lbZ7M3c7593/v81t8FEayz2Zs5377vfT7MrJdv+Y/lP4hO2ZY=
+  </data>
+ </layer>
+</map>

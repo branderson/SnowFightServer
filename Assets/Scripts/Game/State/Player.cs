@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.WSA;
 
 namespace Game.State
 {
@@ -8,6 +9,7 @@ namespace Game.State
         [SerializeField] private string _userID;
         private float _posX;
         private float _posY;
+        public Fortress Fortress;
         public float Facing;
         public int Health = 3;
         public int Score;
@@ -27,9 +29,10 @@ namespace Game.State
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        public void Initialize(string userID)
+        public void Initialize(string userID, Fortress fortress)
         {
             _userID = userID;
+            Fortress  = fortress;
         }
 
         public void SetPosition(Vector2 position)
@@ -77,11 +80,13 @@ namespace Game.State
     public class SerializablePlayer
     {
         public string UserID;
+        public int FortressID;
         public int Score;
 
         public SerializablePlayer(Player player)
         {
             UserID = player.UserID;
+            FortressID = player.Fortress.ID;
             Score = player.Score;
         }
     }
