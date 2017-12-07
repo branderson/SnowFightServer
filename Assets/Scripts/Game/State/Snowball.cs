@@ -4,7 +4,7 @@ namespace Game.State
 {
     public class Snowball : MonoBehaviour
     {
-        [SerializeField] public static float Speed = 10f;
+        [SerializeField] public static float Speed = 20f;
         public string OwnerID;
         [SerializeField] private float _lifespan = 3f;
 

@@ -10,7 +10,7 @@ namespace ImportControllers
         private void HandleInstanceProperties()
         {
             Fortress fortress = GetComponent<Fortress>();
-            fortress.ID = Mathf.FloorToInt(transform.position.x + transform.position.y * 1000);
+            fortress.ID = Mathf.FloorToInt(transform.position.x + transform.position.y * 200);
             DestroyImmediate(GetComponent<TiledLoaderProperties>());
             DestroyImmediate(this, true);
         }

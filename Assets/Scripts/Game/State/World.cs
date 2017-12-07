@@ -45,8 +45,8 @@ namespace Game.State
             GameObject playerObject = Instantiate(_playerPrefab, this.transform);
             Player player = playerObject.GetComponent<Player>();
             Fortress fortress = GetUnassignedFortress();
-            AssignFortress(fortress, player);
             player.Initialize(userID, fortress);
+            AssignFortress(fortress, player);
 
             _players[userID] = player;
 
@@ -104,10 +104,10 @@ namespace Game.State
                 GameObject playerObject = Instantiate(_playerPrefab, this.transform);
                 Player newPlayer = playerObject.GetComponent<Player>();
                 Fortress fortress = GetFortress(player.FortressID);
-                AssignFortress(fortress, newPlayer);
                 newPlayer.Initialize(player.UserID, fortress);
                 newPlayer.Score = player.Score;
                 newPlayer.gameObject.SetActive(false);
+                AssignFortress(fortress, newPlayer);
 
                 _players[player.UserID] = newPlayer;
             }
@@ -121,12 +121,12 @@ namespace Game.State
             foreach (string aboutID in _players.Keys)
             {
                 Player player = _players[aboutID];
-                if (!player.gameObject.activeInHierarchy) continue;
                 PlayerSync sync = new PlayerSync
                 {
                     Time = DateTime.UtcNow,
                     UserID = aboutID,
                     Team = TeamManager.Instance.GetUserTeam(aboutID).Name,
+                    Active = player.Active,
                     PosX = player.transform.position.x,
                     PosY = player.transform.position.y,
                     Facing = player.Facing,
@@ -169,6 +169,7 @@ namespace Game.State
             // TODO: Prevent reassignment of fortresses
             _fortresses[fortress] = owner;
             fortress.OwnerID = owner.UserID;
+            fortress.SetVisible(true);
         }
 
         /// <summary>

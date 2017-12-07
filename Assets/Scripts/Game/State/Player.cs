@@ -6,9 +6,12 @@ namespace Game.State
 {
     public class Player : MonoBehaviour
     {
+        public const int KillBonus = 100;
+
         [SerializeField] private string _userID;
         private float _posX;
         private float _posY;
+        public bool Active = false;
         public Fortress Fortress;
         public float Facing;
         public int Health = 3;
@@ -33,6 +36,26 @@ namespace Game.State
         {
             _userID = userID;
             Fortress  = fortress;
+            Despawn();
+        }
+
+        public void Spawn()
+        {
+            SetPosition(Fortress.transform.position);
+            gameObject.SetActive(true);
+            Active = true;
+        }
+
+        public void Despawn()
+        {
+            SetPosition(Fortress.transform.position);
+            gameObject.SetActive(false);
+            Active = false;
+        }
+
+        public void Respawn()
+        {
+            SetPosition(Fortress.transform.position);
         }
 
         public void SetPosition(Vector2 position)
@@ -58,6 +81,7 @@ namespace Game.State
         private void Die()
         {
             Debug.Log(string.Format("Player {0} has died", UserID));
+            Respawn();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -68,12 +92,14 @@ namespace Game.State
                 Health--;
                 // TODO: Reward snowball's owner
                 snowball.Destroy();
-                if (Health <= 0) Die();
+                if (Health <= 0)
+                {
+                    Die();
+                    World.Instance.GetPlayer(snowball.OwnerID).Score += KillBonus;
+                }
                 else WasHit = true;
             }
         }
-
-
     }
 
     [Serializable]

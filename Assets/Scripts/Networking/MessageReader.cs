@@ -73,6 +73,7 @@ namespace Networking
                 Debug.LogError("No player exists for PlayerUpdate received!");
                 return;
             }
+            if (!player.Active) return;
             player.Move(update.MoveX, update.MoveY);
             player.Facing = update.Facing;
             if (update.PickUp)

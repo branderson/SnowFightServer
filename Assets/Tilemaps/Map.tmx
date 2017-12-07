@@ -50,6 +50,8 @@
   <tile id="51">
    <properties>
     <property name="Name" value="Fortress"/>
+    <property name="ScaleX" type="float" value="3"/>
+    <property name="ScaleY" type="float" value="3"/>
    </properties>
   </tile>
  </tileset>

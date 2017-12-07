@@ -64,14 +64,11 @@ namespace Networking
                 }
             }
             Player player = World.Instance.GetPlayer(userID);
-            if (player != null)
+            if (player == null)
             {
-                player.gameObject.SetActive(true);
+                player = World.Instance.AddPlayer(userID);
             }
-            else
-            {
-                World.Instance.AddPlayer(userID);
-            }
+            player.Spawn();
             _users[userID] = clientID;
             _userClientIDs[clientID] = userID;
             _loggedIn[userID] = true;
@@ -92,6 +89,7 @@ namespace Networking
                 Debug.Log(string.Format("User {0} tried to logout but does not exist in the game", userID));
                 return;
             }
+            player.Despawn();
             Debug.Log("Event: Log Out, UserID: " + userID);
             player.gameObject.SetActive(false);
             _loggedIn[userID] = false;
