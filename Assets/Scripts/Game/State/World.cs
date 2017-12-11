@@ -105,6 +105,7 @@ namespace Game.State
                 Player newPlayer = playerObject.GetComponent<Player>();
                 Fortress fortress = GetFortress(player.FortressID);
                 newPlayer.Initialize(player.UserID, fortress);
+                newPlayer.SetSkin(player.Skin);
                 newPlayer.Score = player.Score;
                 newPlayer.gameObject.SetActive(false);
                 AssignFortress(fortress, newPlayer);
@@ -126,7 +127,9 @@ namespace Game.State
                     Time = DateTime.UtcNow,
                     UserID = aboutID,
                     Team = TeamManager.Instance.GetUserTeam(aboutID).Name,
+                    Score = player.Score,
                     Active = player.Active,
+                    Skin = player.Skin,
                     PosX = player.transform.position.x,
                     PosY = player.transform.position.y,
                     Facing = player.Facing,

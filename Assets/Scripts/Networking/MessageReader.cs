@@ -1,4 +1,6 @@
-﻿using Game;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Game;
 using Game.State;
 using Networking.Data;
 using UnityEngine;
@@ -34,6 +36,12 @@ namespace Networking
                 case Packets.SpawnSnowball:
                     HandleSpawnSnowball(SerializationHandler.Deserialize<SpawnSnowball>(envelope.Packet));
                     break;
+                case Packets.SetSkin:
+                    HandleSetSkin(SerializationHandler.Deserialize<SetSkin>(envelope.Packet));
+                    break;
+                case Packets.RequestLeaderboardData:
+                    HandleRequestLeaderboardData(SerializationHandler.Deserialize<RequestLeaderboardData>(envelope.Packet));
+                    break;
                 default:
                     break;
             }
@@ -42,13 +50,7 @@ namespace Networking
         private static void HandleLogin(Login login)
         {
             if (login == null) throw new WrongPacketTypeException();
-            bool success = ConnectionManager.Instance.Login(login.UserID, login.ClientID);
-            AckLogin ack = new AckLogin
-            {
-                UserID = login.UserID,
-                Success = success,
-            };
-            Socket.Instance.SendPacket(ack, Packets.AckLogin, login.ClientID);
+            ConnectionManager.Instance.Login(login.UserID, login.ClientID);
         }
 
         private static void HandleJoinTeam(JoinTeam joinTeam)
@@ -120,6 +122,39 @@ namespace Networking
             };
 
             Socket.Instance.SendPacket(sync, Packets.SnowballSync);
+        }
+
+        private static void HandleSetSkin(SetSkin setSkin)
+        {
+            if (setSkin == null) throw new WrongPacketTypeException();
+            Player player = World.Instance.GetPlayer(setSkin.UserID);
+            player.SetSkin(setSkin.Skin);
+        }
+
+        private static void HandleRequestLeaderboardData(RequestLeaderboardData request)
+        {
+            if (request == null) throw new WrongPacketTypeException();
+            LeaderboardDataEntry[] playerData = World.Instance.GetPlayers()
+                .Select(item => new LeaderboardDataEntry { Name = item.UserID, Score = item.Score })
+                .OrderByDescending(item => item.Score).ToArray();
+            int rank = 1;
+            foreach (LeaderboardDataEntry entry in playerData)
+            {
+                entry.Type = LeaderboardDataType.Player;
+                entry.Rank = rank++;
+                Socket.Instance.SendPacket(entry, Packets.LeaderboardData, request.UserID);
+            }
+            LeaderboardDataEntry[] teamData = TeamManager.Instance.GetTeams()
+                .Select(item => new LeaderboardDataEntry { Name = item.Name, Score = item.Score })
+                .OrderByDescending(item => item.Score).ToArray();
+            rank = 1;
+            foreach (LeaderboardDataEntry entry in teamData)
+            {
+                entry.Type = LeaderboardDataType.Team;
+                entry.Rank = rank++;
+                Socket.Instance.SendPacket(entry, Packets.LeaderboardData, request.UserID);
+            }
+            Socket.Instance.SendPacket(new EndLeaderboardResponse(), Packets.EndLeaderboardResponse, request.UserID);
         }
     }
 }

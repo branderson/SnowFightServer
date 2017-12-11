@@ -29,5 +29,15 @@ namespace Game.State
         {
             World.Instance.DestroyObject(_objectID);
         }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player)
+            {
+                player.GetHit(OwnerID);
+                Destroy();
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using Assets.Utility;
 using Game.State;
+using Networking.Data;
 using UnityEngine;
 
 namespace Networking
@@ -52,28 +53,38 @@ namespace Networking
             return 0;
         }
 
-        public bool Login(string userID, int clientID)
+        public void Login(string userID, int clientID)
         {
             bool loggedIn;
+            AckLogin ack = new AckLogin
+            {
+                UserID = userID,
+                Success = false,
+            };
             if (_loggedIn.TryGetValue(userID, out loggedIn))
             {
                 if (loggedIn)
                 {
                     Debug.Log(string.Format("User attempted to login as {0} but {0} is already logged in", userID));
-                    return false;
+                    Socket.Instance.SendPacket(ack, Packets.AckLogin, clientID);
+                    return;
                 }
             }
             Player player = World.Instance.GetPlayer(userID);
+            bool firstLogin = false;
             if (player == null)
             {
                 player = World.Instance.AddPlayer(userID);
+                firstLogin = true;
             }
             player.Spawn();
             _users[userID] = clientID;
             _userClientIDs[clientID] = userID;
             _loggedIn[userID] = true;
             Debug.Log(string.Format("Event: Log In, UserID: {0}, ClientID: {1}", userID, clientID));
-            return true;
+            ack.Success = true;
+            ack.FirstLogin = firstLogin;
+            Socket.Instance.SendPacket(ack, Packets.AckLogin, clientID);
         }
 
         public void Logout(string userID)

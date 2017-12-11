@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.3" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="32" tileheight="32" nextobjectid="1">
  <tileset firstgid="1" name="objects-spritesheet" tilewidth="32" tileheight="32" tilecount="100" columns="10">
-  <image source="../../../../Dropbox/Adina/SnowballFight/objects-spritesheet.png" width="320" height="320"/>
+  <image source="objects-spritesheet.png" width="320" height="320"/>
   <tile id="4">
    <properties>
     <property name="Name" value="Snowdrift1"/>
@@ -9,7 +9,7 @@
   </tile>
   <tile id="5">
    <properties>
-    <property name="Name" value="Snowdrift2"/>
+    <property name="Name" value="SnowPileDrop"/>
    </properties>
   </tile>
   <tile id="6">
@@ -44,20 +44,128 @@
   </tile>
   <tile id="16">
    <properties>
-    <property name="Name" value="IceSlick"/>
+    <property name="Name" value="IceSlick1"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="Name" value="Bush"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="Name" value="Rock1"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="Name" value="Rock2"/>
+   </properties>
+  </tile>
+  <tile id="47">
+   <properties>
+    <property name="Name" value="SnowMountain"/>
    </properties>
   </tile>
   <tile id="51">
    <properties>
     <property name="Name" value="Fortress"/>
-    <property name="ScaleX" type="float" value="3"/>
-    <property name="ScaleY" type="float" value="3"/>
+   </properties>
+  </tile>
+  <tile id="56">
+   <properties>
+    <property name="Name" value="MediumSlickLeft"/>
+   </properties>
+  </tile>
+  <tile id="57">
+   <properties>
+    <property name="Name" value="MediumSlickMiddle"/>
+   </properties>
+  </tile>
+  <tile id="58">
+   <properties>
+    <property name="Name" value="MediumSlickRight"/>
+   </properties>
+  </tile>
+  <tile id="61">
+   <properties>
+    <property name="Name" value="IceSlick3"/>
+   </properties>
+  </tile>
+  <tile id="63">
+   <properties>
+    <property name="Name" value="LittleSlickLeft"/>
+   </properties>
+  </tile>
+  <tile id="64">
+   <properties>
+    <property name="Name" value="LittleSlickMiddle"/>
+   </properties>
+  </tile>
+  <tile id="65">
+   <properties>
+    <property name="Name" value="LittleSlickRight"/>
+   </properties>
+  </tile>
+  <tile id="66">
+   <properties>
+    <property name="Name" value="WonkySlickLeft"/>
+   </properties>
+  </tile>
+  <tile id="67">
+   <properties>
+    <property name="Name" value="WonkySlickMiddle"/>
+   </properties>
+  </tile>
+  <tile id="68">
+   <properties>
+    <property name="Name" value="WonkySlickRight"/>
+   </properties>
+  </tile>
+  <tile id="71">
+   <properties>
+    <property name="Name" value="WonkyBigLeft"/>
+   </properties>
+  </tile>
+  <tile id="72">
+   <properties>
+    <property name="Name" value="WonkyBigMiddle"/>
+   </properties>
+  </tile>
+  <tile id="73">
+   <properties>
+    <property name="Name" value="WonkyBigRight"/>
+   </properties>
+  </tile>
+  <tile id="77">
+   <properties>
+    <property name="Name" value="Rocks"/>
+   </properties>
+  </tile>
+  <tile id="81">
+   <properties>
+    <property name="Name" value="BigLeftSlick"/>
+   </properties>
+  </tile>
+  <tile id="82">
+   <properties>
+    <property name="Name" value="BigMiddleSlick"/>
+   </properties>
+  </tile>
+  <tile id="83">
+   <properties>
+    <property name="Name" value="BigRightSlick"/>
    </properties>
   </tile>
  </tileset>
+ <layer name="Tile Layer 2" width="200" height="200">
+  <data encoding="base64" compression="zlib">
+   eJzt3U1uwkAMBlDO1W7SP6ntsnD/syCVyWaENQjaJI7f23g7LJBjJ/lyOAAAAAAAAAAA1DK1+tLq60rnIK+3Vp+6+rzCWWDv5v/be1A/lj0OAAAAAAAAAAA78dnq16B+L3YiALIZ9RI9BAAAAAAAAIClRLlYc5XTAwAAAFDHVjOd5/cwjkE9LXscABKJeoh3+IBrplZ9lwoAchjtsray2wJgO0b3G6rujvo8rGq/HwAAAAAAAAAAAAAAAAAA1rbVTFgAoJ6pVdmcZCJDJ5d+/jHvAFCZvSAAAAAAAAAAAABAPv27LH31bgsAAAAAAFxEO3W7dABupZfAfkUZXLK3oAY5fADcY/QMr9kRANiLW697XO8A0DM7A9dMrc7fJ3VfBgAAAADy+Wn1GFQ7fwAiox6ilwAAAABAHTJ/AAAAAOAxsvWBakaZVp5BBgAAAAAAAIAaPDsFVNRnOZ7WOggAAAAAAAAAAL/k4QAAAPAf+nnTfAkAeUR7Y/0cAADgb8mgAgAAgItoRjYrAwAAAAAAAAAAAMB95M8D8Ci9BAAAAIDKfLMBAAAAAABiZ0QXNi4=
+  </data>
+ </layer>
  <layer name="Tile Layer 1" width="200" height="200">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
 </map>

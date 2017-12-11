@@ -13,5 +13,10 @@
         PlayerSync = 8,
         SpawnSnowball = 9,
         SnowballSync = 10,
+        SnowPileSync = 11,
+        SetSkin = 12,
+        RequestLeaderboardData = 13,
+        LeaderboardData = 14,
+        EndLeaderboardResponse = 15,
     }
 }

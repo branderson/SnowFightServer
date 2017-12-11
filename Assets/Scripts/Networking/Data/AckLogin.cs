@@ -4,5 +4,6 @@
     {
         public string UserID;
         public bool Success;
+        public bool FirstLogin;
     }
 }

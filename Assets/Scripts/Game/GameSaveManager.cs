@@ -41,5 +41,11 @@ namespace Game
                 World.Instance.LoadPlayers(loaded.Players);
             }
         }
+
+        public void SaveAndQuit()
+        {
+            Save();
+            Application.Quit();
+        }
     }
 }
