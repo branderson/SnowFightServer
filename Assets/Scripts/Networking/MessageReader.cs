@@ -50,12 +50,15 @@ namespace Networking
         private static void HandleLogin(Login login)
         {
             if (login == null) throw new WrongPacketTypeException();
-            ConnectionManager.Instance.Login(login.UserID, login.ClientID);
+            ConnectionManager.Instance.Login(login.UserID.ToUpper(), login.ClientID);
         }
 
         private static void HandleJoinTeam(JoinTeam joinTeam)
         {
             if (joinTeam == null) throw new WrongPacketTypeException();
+            joinTeam.UserID = joinTeam.UserID.ToUpper();
+            joinTeam.TeamName = joinTeam.TeamName.ToUpper();
+            
             bool success = TeamManager.Instance.AddUserToTeam(joinTeam.UserID, joinTeam.TeamName);
             AckJoinTeam ack = new AckJoinTeam
             {

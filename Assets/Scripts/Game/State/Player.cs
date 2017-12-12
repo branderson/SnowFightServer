@@ -48,6 +48,7 @@ namespace Game.State
 
         public void Spawn()
         {
+            Health = 3;
             SetPosition(Fortress.transform.position);
             gameObject.SetActive(true);
             Active = true;
@@ -62,6 +63,7 @@ namespace Game.State
 
         public void Respawn()
         {
+            Health = 3;
             SetPosition(Fortress.transform.position);
         }
 

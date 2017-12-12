@@ -26,6 +26,11 @@ namespace Game
             return team;
         }
 
+        private void RemoveTeam(Team team)
+        {
+            _teamNameToTeam.Remove(team.Name);
+        }
+
         /// <summary>
         /// Add the given user to the given team, creating the team if it does not exist.
         /// Will also remove player from previous team, if any.
@@ -53,6 +58,7 @@ namespace Game
             if (_userToTeam.TryGetValue(userID, out oldTeam))
             {
                 oldTeam.RemoveUser(userID);
+                if (oldTeam.Members.Count == 0) RemoveTeam(oldTeam);
                 Debug.Log(string.Format("Event: Remove From Team, UserID: {0}, Team Name: {1}", userID, oldTeam.Name));
             }
             _userToTeam[userID] = team;
