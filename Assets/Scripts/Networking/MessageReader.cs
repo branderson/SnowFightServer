@@ -10,7 +10,7 @@ namespace Networking
 {
     public static class MessageReader
     {
-        public static void ReadMessage(byte[] message)
+        public static void ReadMessage(byte[] message, int clientID)
         {
             Envelope envelope = SerializationHandler.Deserialize<Envelope>(message);
             if (envelope == null) throw new NotAnEnvelopeException();
@@ -41,6 +41,9 @@ namespace Networking
                     break;
                 case Packets.RequestLeaderboardData:
                     HandleRequestLeaderboardData(SerializationHandler.Deserialize<RequestLeaderboardData>(envelope.Packet));
+                    break;
+                case Packets.TestConnection:
+                    HandleTestConnection(clientID);
                     break;
                 default:
                     break;
@@ -158,6 +161,11 @@ namespace Networking
                 Socket.Instance.SendPacket(entry, Packets.LeaderboardData, request.UserID);
             }
             Socket.Instance.SendPacket(new EndLeaderboardResponse(), Packets.EndLeaderboardResponse, request.UserID);
+        }
+
+        private static void HandleTestConnection(int clientID)
+        {
+            Socket.Instance.SendPacket(new AckConnection(), Packets.AckConnection, clientID);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Networking
                     ConnectionManager.Instance.RemoveClient(connectionID);
                     break;
                 case NetworkEventType.DataEvent:
-                    MessageReader.ReadMessage(buffer);
+                    MessageReader.ReadMessage(buffer, connectionID);
                     break;
                 case NetworkEventType.BroadcastEvent:
                     break;

@@ -18,5 +18,7 @@
         RequestLeaderboardData = 13,
         LeaderboardData = 14,
         EndLeaderboardResponse = 15,
+        TestConnection = 16,
+        AckConnection = 17,
     }
 }
