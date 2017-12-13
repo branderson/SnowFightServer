@@ -25,7 +25,7 @@ namespace Networking
                     Debug.Log(value);
                     break;
                 case Packets.Login:
-                    HandleLogin(SerializationHandler.Deserialize<Login>(envelope.Packet));
+                    HandleLogin(SerializationHandler.Deserialize<Login>(envelope.Packet), clientID);
                     break;
                 case Packets.JoinTeam:
                     HandleJoinTeam(SerializationHandler.Deserialize<JoinTeam>(envelope.Packet));
@@ -50,10 +50,10 @@ namespace Networking
             }
         }
 
-        private static void HandleLogin(Login login)
+        private static void HandleLogin(Login login, int clientID)
         {
             if (login == null) throw new WrongPacketTypeException();
-            ConnectionManager.Instance.Login(login.UserID.ToUpper(), login.ClientID);
+            ConnectionManager.Instance.Login(login.UserID.ToUpper(), clientID);
         }
 
         private static void HandleJoinTeam(JoinTeam joinTeam)

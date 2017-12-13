@@ -23,7 +23,7 @@ namespace Game
                 Players = serializablePlayers,
                 Teams = serializableTeams,
             };
-            FileStream file = File.Create(Application.persistentDataPath + "/" + _savePath);
+            FileStream file = File.Create(Application.dataPath + "/" + _savePath);
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(file, save);
             file.Close();
@@ -31,7 +31,7 @@ namespace Game
 
         public void Load()
         {
-            if (File.Exists(Application.persistentDataPath + "/" + _savePath))
+            if (File.Exists(Application.dataPath + "/" + _savePath))
             {
                 BinaryFormatter bf = new BinaryFormatter();
                 FileStream file = File.Open(Application.persistentDataPath + "/" + _savePath, FileMode.Open);

@@ -2,7 +2,6 @@
 using Networking;
 using Networking.Data;
 using UnityEngine;
-using UnityEngine.WSA;
 
 namespace Game.State
 {
@@ -133,7 +132,7 @@ namespace Game.State
         public void GetHit(string hitBy)
         {
             Health--;
-            Drop();
+            if (Carrying) Drop();
             if (Health <= 0)
             {
                 Die();

@@ -30,10 +30,10 @@ namespace Game.State
             World.Instance.DestroyObject(_objectID);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D col)
         {
-            Player player = collision.gameObject.GetComponent<Player>();
-            if (player)
+            Player player = col.gameObject.GetComponent<Player>();
+            if (player.UserID != OwnerID)
             {
                 player.GetHit(OwnerID);
                 Destroy();
